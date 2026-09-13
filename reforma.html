@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La reforma</title>
+<meta name="theme-color" content="#1C2530">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Reforma">
+<link rel="manifest" href='data:application/manifest+json,{"name":"La reforma","short_name":"Reforma","start_url":".","display":"standalone","background_color":"%23EEF0F2","theme_color":"%231C2530","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2722%27 fill=%27%231C2530%27/%3E%3Crect x=%2718%27 y=%2740%27 width=%2764%27 height=%2720%27 rx=%274%27 fill=%27%23F2B705%27/%3E%3C/svg%3E","sizes":"192x192","type":"image/svg+xml"}]}'>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231C2530'/%3E%3Crect x='18' y='40' width='64' height='20' rx='4' fill='%23F2B705'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231C2530'/%3E%3Crect x='18' y='40' width='64' height='20' rx='4' fill='%23F2B705'/%3E%3C/svg%3E">
+
+<style>
+  :root{
+    --bg:#EEF0F2; --paper:#fff; --ink:#1C2530; --muted:#6B7684; --line:#D6DAE0;
+    --accent:#0F6E68; --tape:#F2B705; --danger:#B4372F;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.4 "Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;-webkit-text-size-adjust:100%}
+  #app{max-width:640px;margin:0 auto;padding:16px 14px 90px;padding-top:calc(16px + env(safe-area-inset-top))}
+  h1{font-size:26px;font-weight:700;margin:0;letter-spacing:-.3px}
+  h2{font-size:24px;font-weight:700;margin:0}
+  h3{font-size:18px;font-weight:700;margin:0 0 12px}
+  .muted{color:var(--muted);font-size:14px}
+  button,.btn{font:inherit;font-weight:600;font-size:15px;padding:10px 16px;border-radius:8px;cursor:pointer;
+    border:1px solid var(--line);background:var(--paper);color:var(--ink);text-decoration:none;display:inline-block}
+  .primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .primary:disabled{opacity:.5}
+  .small{padding:6px 12px;font-size:13px}
+  .danger{color:var(--danger)}
+  .sel{background:var(--ink);border-color:var(--ink);color:#fff}
+  .chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:8px;-webkit-overflow-scrolling:touch}
+  .chips button{white-space:nowrap;padding:6px 12px;font-size:14px}
+  .list{display:flex;flex-direction:column;gap:8px}
+  .item{text-align:left;width:100%;padding:12px 14px;border-radius:10px;border-left:4px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:400}
+  .item.done{border-left-color:var(--tape)}
+  .item .n{font-size:16px;font-weight:600}
+  .item .p{font-weight:600;white-space:nowrap;color:var(--muted)}
+  .item.done .p{color:var(--ink)}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px}
+  .card.chosen{border-color:var(--tape);box-shadow:0 0 0 2px var(--tape)}
+  .row{display:flex;gap:12px}
+  .thumb{width:88px;height:88px;object-fit:cover;border-radius:8px;flex-shrink:0}
+  .mini{width:64px;height:64px;object-fit:cover;border-radius:6px}
+  .stars button{background:none;border:0;padding:0;font-size:20px;line-height:1;color:var(--line)}
+  .stars button.on{color:var(--tape)}
+  .stars.ro button{cursor:default;font-size:16px}
+  .actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .bottom{display:flex;gap:8px;margin-top:20px}
+  .bottom .primary{flex:1}
+  label.f{display:block;margin-bottom:12px}
+  label.f>div:first-child{font-size:13px;color:var(--muted);margin-bottom:4px}
+  input,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
+  textarea{min-height:70px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .modal{position:fixed;inset:0;background:rgba(28,37,48,.45);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+  .sheet{background:var(--bg);width:100%;max-width:640px;max-height:92vh;overflow-y:auto;border-radius:14px 14px 0 0;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+  .photos{display:flex;gap:8px;flex-wrap:wrap}
+  .ph{position:relative}
+  .ph img{width:72px;height:72px;object-fit:cover;border-radius:8px;display:block}
+  .ph button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:11px;border:0;background:var(--ink);color:#fff;font-size:13px;padding:0}
+  .addph{width:72px;height:72px;border:1px dashed var(--muted);background:transparent;color:var(--muted);font-size:13px;font-weight:400}
+  table{border-collapse:collapse;font-size:14px;min-width:520px}
+  th,td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+  th{font-size:13px;font-weight:600}
+  th.ch{background:#FFF7D6}
+  td.lab{color:var(--muted);font-size:13px;white-space:nowrap}
+  .tbl{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:10px;margin-top:14px}
+  .toast{position:fixed;bottom:12px;left:12px;right:12px;background:var(--danger);color:#fff;padding:10px;border-radius:8px;font-size:14px;z-index:60}
+  .empty{color:var(--muted);padding:24px 0;text-align:center}
+  a{color:var(--accent)}
+  .setup{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;line-height:1.5}
+  .setup code{background:var(--bg);padding:2px 5px;border-radius:4px}
+  .setup ol{padding-left:20px}
+</style>
+</head>
+<body>
+<div id="app"><p class="muted">Cargando la reforma…</p></div>
+
+<script type="module">
+// =====================================================================
+//  CONFIGURACIÓN — pega aquí lo que te da Firebase (Configuración del
+//  proyecto → Tus apps → SDK de Firebase → Config). Solo hace falta
+//  apiKey, projectId y appId; el resto puede quedarse como está.
+// =====================================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyB_S60L4UV43DFz67MgV2RhL2iY-qcR_I8",
+  projectId: "reforma-8d468",
+  appId: "1:40054424593:web:6ac7256792994e5500ddb0",
+};
+// =====================================================================
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, doc, onSnapshot, setDoc, updateDoc, deleteDoc, getDoc, writeBatch, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const ZONAS = ["Baño","Cocina","Suelo","Pintura","Electricidad","Otros"];
+const $ = (s, el=document) => el.querySelector(s);
+const app = $("#app");
+const uid = () => Math.random().toString(36).slice(2,10)+Date.now().toString(36);
+const esc = s => String(s??"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const euro = n => (n===""||n==null||isNaN(n)) ? "—" : Number(n).toLocaleString("es-ES",{style:"currency",currency:"EUR",maximumFractionDigits:0});
+const stars = (v, ro=true) => `<div class="stars ${ro?"ro":""}">${[1,2,3,4,5].map(n=>`<button type="button" data-star="${n}" class="${n<=(v||0)?"on":""}">★</button>`).join("")}</div>`;
+
+if (Object.values(firebaseConfig).some(v => v === "PEGA_AQUI")) {
+  app.innerHTML = `<h1>La reforma</h1><div class="setup" style="margin-top:14px">
+    <p>Falta conectar la base de datos. Sigue estos pasos una sola vez:</p>
+    <ol>
+      <li>Entra en <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a> y crea un proyecto (Google Analytics: desactivado).</li>
+      <li>En la pantalla principal pulsa el icono <b>&lt;/&gt;</b> (app web), ponle un nombre y pulsa Registrar. Copia los valores <code>apiKey</code>, <code>projectId</code> y <code>appId</code>.</li>
+      <li>Menú Compilación → <b>Firestore Database</b> → Crear base de datos → modo de prueba → ubicación <code>eur3</code>.</li>
+      <li>Pestaña <b>Reglas</b>, sustituye el contenido por:<br>
+        <code>rules_version='2'; service cloud.firestore { match /databases/{d}/documents { match /{doc=**} { allow read, write: if true; } } }</code><br>y Publicar.</li>
+      <li>Abre este archivo <code>index.html</code> con un editor de texto, pega los tres valores en <code>firebaseConfig</code> al principio del script, y vuelve a subirlo.</li>
+    </ol></div>`;
+  throw new Error("config");
+}
+
+const db = getFirestore(initializeApp(firebaseConfig));
+const col = name => collection(db, name);
+
+// ---------- estado ----------
+let elementos = [], opciones = [], fotos = {};
+let view = { name: "home", zona: "Todo", elId: null, modo: "tarjetas" };
+let modal = null;
+
+onSnapshot(col("elementos"), s => { elementos = s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.orden||0)-(b.orden||0)); render(); }, err);
+onSnapshot(col("opciones"),  s => { opciones  = s.docs.map(d=>({id:d.id,...d.data()})); render(); cargarFotos(); }, err);
+
+function err(e){ toast("Error de conexión con la base de datos: " + (e.message||e)); console.error(e); }
+function toast(msg){ let t=$(".toast"); if(!t){t=document.createElement("div");t.className="toast";document.body.appendChild(t);} t.textContent=msg; setTimeout(()=>t.remove(),5000); }
+
+async function cargarFotos(){
+  const ids = opciones.flatMap(o=>o.fotoIds||[]).filter(id=>!(id in fotos));
+  for (const id of ids){
+    fotos[id] = null; // evita pedirla dos veces
+    try{ const d = await getDoc(doc(db,"fotos",id)); if(d.exists()){ fotos[id]=d.data().data; render(); } }catch(e){}
+  }
+}
+function compress(file, maxSide=900, q=.72){
+  return new Promise((res,rej)=>{ const img=new Image(); const u=URL.createObjectURL(file);
+    img.onload=()=>{ const s=Math.min(1,maxSide/Math.max(img.width,img.height)); const c=document.createElement("canvas");
+      c.width=Math.round(img.width*s); c.height=Math.round(img.height*s); c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+      URL.revokeObjectURL(u); res(c.toDataURL("image/jpeg",q)); };
+    img.onerror=rej; img.src=u; });
+}
+
+// ---------- acciones ----------
+const addElemento = (nombre, zona) => setDoc(doc(col("elementos")), { nombre, zona, orden: Date.now() }).catch(err);
+async function deleteElemento(id){
+  const el = elementos.find(e=>e.id===id);
+  if(!confirm(`¿Eliminar "${el.nombre}" con todas sus opciones?`)) return;
+  const b = writeBatch(db);
+  for (const o of opciones.filter(o=>o.elementoId===id)){ for(const f of o.fotoIds||[]) b.delete(doc(db,"fotos",f)); b.delete(doc(db,"opciones",o.id)); }
+  b.delete(doc(db,"elementos",id));
+  await b.commit().catch(err);
+  view = {...view, name:"home", elId:null}; render();
+}
+const saveOpcion = op => setDoc(doc(db,"opciones",op.id), op).catch(err);
+async function deleteOpcion(id){
+  const o = opciones.find(x=>x.id===id);
+  if(!confirm(`¿Eliminar la opción "${o.nombre}"?`)) return;
+  const b = writeBatch(db); for(const f of o.fotoIds||[]) b.delete(doc(db,"fotos",f)); b.delete(doc(db,"opciones",id));
+  await b.commit().catch(err);
+}
+async function elegir(id){
+  const o = opciones.find(x=>x.id===id); const b = writeBatch(db);
+  for (const x of opciones.filter(x=>x.elementoId===o.elementoId)) b.update(doc(db,"opciones",x.id), { elegida: x.id===id ? !o.elegida : false });
+  await b.commit().catch(err);
+}
+
+// ---------- render ----------
+function render(){
+  if (view.name==="elemento") renderElemento(); else renderHome();
+  if (modal) app.insertAdjacentHTML("beforeend", modal.html());
+  if (modal) modal.bind();
+}
+
+function renderHome(){
+  const decididos = elementos.filter(e=>opciones.some(o=>o.elementoId===e.id&&o.elegida)).length;
+  const total = elementos.reduce((s,e)=>{ const c=opciones.find(o=>o.elementoId===e.id&&o.elegida); return s+(c&&c.precio?Number(c.precio):0); },0);
+  const lista = elementos.filter(e=>view.zona==="Todo"||e.zona===view.zona);
+  app.innerHTML = `
+    <header style="margin-bottom:16px"><h1>La reforma</h1>
+      <p class="muted" style="margin:4px 0 0">${decididos} de ${elementos.length} cosas decididas${total>0?` · ${euro(total)} en lo elegido`:""}</p></header>
+    <div class="chips">${["Todo",...ZONAS].map(z=>`<button data-zona="${z}" class="${view.zona===z?"sel":""}">${z}</button>`).join("")}</div>
+    ${lista.length? "" : `<p class="empty">Aún no hay nada en ${esc(view.zona)}. Añade la primera cosa a decidir.</p>`}
+    <div class="list">${lista.map(e=>{
+      const ops = opciones.filter(o=>o.elementoId===e.id); const c = ops.find(o=>o.elegida);
+      return `<button class="item ${c?"done":""}" data-open="${e.id}">
+        <div style="min-width:0"><div class="n">${esc(e.nombre)}</div>
+          <div class="muted" style="font-size:13px">${esc(e.zona)} · ${ops.length} ${ops.length===1?"opción":"opciones"}${c?` · elegido: ${esc(c.nombre)}`:""}</div></div>
+        <div class="p">${c?euro(c.precio):"sin decidir"}</div></button>`; }).join("")}</div>
+    <div class="bottom"><button class="primary" data-act="nuevo">Añadir cosa a decidir</button><button data-act="copia" title="Descargar copia">Copia</button></div>`;
+  app.querySelectorAll("[data-zona]").forEach(b=>b.onclick=()=>{view.zona=b.dataset.zona;render();});
+  app.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{view={...view,name:"elemento",elId:b.dataset.open,modo:"tarjetas"};render();});
+  $("[data-act=nuevo]").onclick=()=>{ modal=elementoForm(view.zona==="Todo"?"Baño":view.zona); render(); };
+  $("[data-act=copia]").onclick=()=>{ const blob=new Blob([JSON.stringify({elementos,opciones},null,2)],{type:"application/json"});
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="reforma.json"; a.click(); };
+}
+
+function renderElemento(){
+  const el = elementos.find(e=>e.id===view.elId);
+  if(!el){ view={...view,name:"home"}; return renderHome(); }
+  const ops = opciones.filter(o=>o.elementoId===el.id).sort((a,b)=>(b.elegida?1:0)-(a.elegida?1:0)||(b.rating||0)-(a.rating||0));
+  const img = (id,cls) => (id&&fotos[id]) ? `<img class="${cls}" src="${fotos[id]}" alt="">` : "";
+  let cuerpo;
+  if (view.modo==="tabla" && ops.length>1){
+    const row = (lab, f) => `<tr><td class="lab">${lab}</td>${ops.map(o=>`<td>${f(o)}</td>`).join("")}</tr>`;
+    cuerpo = `<div class="tbl"><table>
+      <thead><tr><th></th>${ops.map(o=>`<th class="${o.elegida?"ch":""}">${esc(o.nombre)}</th>`).join("")}</tr></thead><tbody>
+      ${row("Foto", o=> o.fotoIds?.[0]&&fotos[o.fotoIds[0]] ? `<img src="${fotos[o.fotoIds[0]]}" style="width:90px;height:70px;object-fit:cover;border-radius:6px">` : "—")}
+      ${row("Precio", o=>`<b>${euro(o.precio)}</b>`)}
+      ${row("Valoración", o=>stars(o.rating))}
+      ${row("Medidas", o=>esc(o.medidas)||"—")}
+      ${row("Tienda", o=>esc(o.tienda)||"—")}
+      ${row("Enlace", o=>o.link?`<a href="${esc(o.link)}" target="_blank" rel="noreferrer">Abrir</a>`:"—")}
+      ${row("Notas", o=>`<div style="white-space:pre-wrap;max-width:220px">${esc(o.notas)||"—"}</div>`)}
+      ${row("", o=>`<button class="small ${o.elegida?"primary":""}" data-elegir="${o.id}">${o.elegida?"Elegida":"Elegir"}</button>`)}
+      </tbody></table></div>`;
+  } else {
+    cuerpo = `<div class="list" style="margin-top:14px;gap:10px">${ops.map(o=>`
+      <div class="card ${o.elegida?"chosen":""}">
+        <div class="row">${img(o.fotoIds?.[0],"thumb")}
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;justify-content:space-between;gap:8px"><div style="font-size:17px;font-weight:600">${esc(o.nombre)}</div><div style="font-size:17px;font-weight:700;white-space:nowrap">${euro(o.precio)}</div></div>
+            ${stars(o.rating)}
+            <div class="muted" style="font-size:13px;margin-top:4px">${[o.tienda,o.medidas].filter(Boolean).map(esc).join(" · ")}</div>
+            ${o.notas?`<div style="margin-top:6px;white-space:pre-wrap">${esc(o.notas)}</div>`:""}
+          </div></div>
+        ${(o.fotoIds||[]).length>1?`<div style="display:flex;gap:6px;margin-top:10px;overflow-x:auto">${o.fotoIds.slice(1).map(f=>img(f,"mini")).join("")}</div>`:""}
+        <div class="actions">
+          <button class="small ${o.elegida?"primary":""}" data-elegir="${o.id}">${o.elegida?"Elegida ✓":"Elegir esta"}</button>
+          ${o.link?`<a class="btn small" href="${esc(o.link)}" target="_blank" rel="noreferrer">Ver enlace</a>`:""}
+          <button class="small" data-editar="${o.id}">Editar</button>
+          <button class="small danger" data-borrar="${o.id}">Borrar</button>
+        </div></div>`).join("")}</div>`;
+  }
+  app.innerHTML = `
+    <button class="small" data-act="back" style="margin-bottom:12px">← Volver</button>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+      <div><h2>${esc(el.nombre)}</h2><div class="muted">${esc(el.zona)}</div></div>
+      ${ops.length>1?`<button class="small" data-act="modo">${view.modo==="tarjetas"?"Comparar":"Tarjetas"}</button>`:""}</div>
+    ${ops.length?"":`<p class="empty">Todavía no hay opciones. Añade la primera que estés valorando.</p>`}
+    ${cuerpo}
+    <div class="bottom"><button class="primary" data-act="nueva">Añadir opción</button><button class="danger" data-act="del">Eliminar</button></div>`;
+  $("[data-act=back]").onclick=()=>{view={...view,name:"home",elId:null};render();};
+  const m=$("[data-act=modo]"); if(m) m.onclick=()=>{view.modo=view.modo==="tarjetas"?"tabla":"tarjetas";render();};
+  $("[data-act=nueva]").onclick=()=>{ modal=opcionForm(null, el.id); render(); };
+  $("[data-act=del]").onclick=()=>deleteElemento(el.id);
+  app.querySelectorAll("[data-elegir]").forEach(b=>b.onclick=()=>elegir(b.dataset.elegir));
+  app.querySelectorAll("[data-editar]").forEach(b=>b.onclick=()=>{ modal=opcionForm(opciones.find(o=>o.id===b.dataset.editar), el.id); render(); });
+  app.querySelectorAll("[data-borrar]").forEach(b=>b.onclick=()=>deleteOpcion(b.dataset.borrar));
+}
+
+// ---------- formularios ----------
+function elementoForm(zonaInicial){
+  let zona = zonaInicial, nombre = "";
+  return {
+    html: () => `<div class="modal" data-modal><div class="sheet">
+      <h3>Nueva cosa a decidir</h3>
+      <label class="f"><div>Qué es</div><input id="fn" value="${esc(nombre)}" placeholder="Ej. Grifo de la ducha" autofocus></label>
+      <label class="f"><div>Zona</div><div class="chips" style="flex-wrap:wrap">${ZONAS.map(z=>`<button type="button" data-z="${z}" class="${zona===z?"sel":""}">${z}</button>`).join("")}</div></label>
+      <div class="bottom" style="margin-top:14px"><button class="primary" id="fs" ${nombre.trim()?"":"disabled"}>Añadir</button><button id="fc">Cancelar</button></div>
+    </div></div>`,
+    bind(){
+      const md=$("[data-modal]"); md.onclick=e=>{ if(e.target===md){modal=null;render();} };
+      $("#fn").oninput=e=>{ nombre=e.target.value; $("#fs").disabled=!nombre.trim(); };
+      md.querySelectorAll("[data-z]").forEach(b=>b.onclick=()=>{ zona=b.dataset.z; md.querySelectorAll("[data-z]").forEach(x=>x.classList.toggle("sel",x.dataset.z===zona)); });
+      $("#fc").onclick=()=>{modal=null;render();};
+      $("#fs").onclick=()=>{ addElemento(nombre.trim(), zona); modal=null; render(); };
+    }
+  };
+}
+
+function opcionForm(op, elementoId){
+  const f = op ? {...op, fotoIds:[...(op.fotoIds||[])]} : { id:uid(), elementoId, nombre:"", precio:"", link:"", tienda:"", medidas:"", notas:"", rating:0, fotoIds:[], elegida:false };
+  let subiendo=false;
+  const fotosHtml = () => `<div class="photos">${f.fotoIds.map(id=>`<div class="ph">${fotos[id]?`<img src="${fotos[id]}">`:`<div style="width:72px;height:72px;background:var(--bg);border-radius:8px"></div>`}<button type="button" data-quitar="${id}">×</button></div>`).join("")}
+      <button type="button" class="addph" id="fadd" ${subiendo?"disabled":""}>${subiendo?"…":"+ foto"}</button>
+      <input type="file" id="ffile" accept="image/*" multiple style="display:none"></div>`;
+  return {
+    html: () => `<div class="modal" data-modal><div class="sheet">
+      <h3>${op?"Editar opción":"Nueva opción"}</h3>
+      <label class="f"><div>Nombre</div><input id="fnombre" value="${esc(f.nombre)}" placeholder="Ej. Roca Terran 120×80 pizarra"></label>
+      <div class="grid2">
+        <label class="f"><div>Precio (€)</div><input id="fprecio" type="number" inputmode="decimal" value="${esc(f.precio)}" placeholder="0"></label>
+        <label class="f"><div>Tienda</div><input id="ftienda" value="${esc(f.tienda)}" placeholder="Leroy, Bricomart…"></label></div>
+      <label class="f"><div>Medidas</div><input id="fmedidas" value="${esc(f.medidas)}" placeholder="120 × 80 cm, 3 cm grosor"></label>
+      <label class="f"><div>Enlace</div><input id="flink" type="url" value="${esc(f.link)}" placeholder="https://…"></label>
+      <label class="f"><div>Valoración</div><div id="frating">${stars(f.rating,false)}</div></label>
+      <label class="f"><div>Notas</div><textarea id="fnotas" placeholder="Pros, contras, plazo de entrega…">${esc(f.notas)}</textarea></label>
+      <div class="f"><div class="muted" style="font-size:13px;margin-bottom:4px">Fotos</div><div id="ffotos">${fotosHtml()}</div></div>
+      <div class="bottom" style="margin-top:14px"><button class="primary" id="fs" ${f.nombre.trim()?"":"disabled"}>Guardar opción</button><button id="fc">Cancelar</button></div>
+    </div></div>`,
+    bind(){
+      const md=$("[data-modal]"); md.onclick=e=>{ if(e.target===md){modal=null;render();} };
+      const bindText=(id,k)=>{ $(id).oninput=e=>{ f[k]=e.target.value; if(k==="nombre") $("#fs").disabled=!f.nombre.trim(); }; };
+      bindText("#fnombre","nombre"); bindText("#fprecio","precio"); bindText("#ftienda","tienda"); bindText("#fmedidas","medidas"); bindText("#flink","link"); bindText("#fnotas","notas");
+      const bindStars=()=>$("#frating").querySelectorAll("[data-star]").forEach(b=>b.onclick=()=>{ const n=+b.dataset.star; f.rating = n===f.rating?0:n; $("#frating").innerHTML=stars(f.rating,false); bindStars(); });
+      bindStars();
+      const bindFotos=()=>{
+        $("#fadd").onclick=()=>$("#ffile").click();
+        $("#ffile").onchange=async e=>{
+          const files=[...e.target.files]; if(!files.length) return;
+          subiendo=true; $("#ffotos").innerHTML=fotosHtml(); bindFotos();
+          for(const file of files){
+            try{ const data=await compress(file); const id=uid(); await setDoc(doc(db,"fotos",id),{data,creado:serverTimestamp()}); fotos[id]=data; f.fotoIds.push(id); }
+            catch(e){ toast("No se pudo guardar una de las fotos."); }
+          }
+          subiendo=false; $("#ffotos").innerHTML=fotosHtml(); bindFotos();
+        };
+        $("#ffotos").querySelectorAll("[data-quitar]").forEach(b=>b.onclick=()=>{ const id=b.dataset.quitar; f.fotoIds=f.fotoIds.filter(x=>x!==id); deleteDoc(doc(db,"fotos",id)).catch(()=>{}); $("#ffotos").innerHTML=fotosHtml(); bindFotos(); });
+      };
+      bindFotos();
+      $("#fc").onclick=()=>{modal=null;render();};
+      $("#fs").onclick=()=>{ if(subiendo) return; f.nombre=f.nombre.trim(); f.precio = f.precio===""?"":Number(f.precio); saveOpcion(f); modal=null; render(); };
+    }
+  };
+}
+</script>
+</body>
+</html>
